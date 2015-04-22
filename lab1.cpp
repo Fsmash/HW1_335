@@ -26,6 +26,7 @@
 //. collision detection
 //. more objects
 //
+
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -82,7 +83,7 @@ struct Game {
         }
         circle.radius = 150.0;
         circle.center.x = 500;
-        circle.center.y = 100;
+        circle.center.y = 50;
     }
 };
 
@@ -189,7 +190,7 @@ void makeParticle(Game *game, int x, int y) {
     p->s.center.x = x;
     p->s.center.y = y;
     p->velocity.y = rnd() - 0.5;
-    p->velocity.x = rnd() - 0.5;
+    p->velocity.x = rnd() - 0;
     game->n++;
 }
 
@@ -285,9 +286,13 @@ void movement(Game *game)
 
         //checks for collision with circle
         if (dist < game->circle.radius) {
-            p->s.center.y = game->circle.center.y + game->circle.radius;
-            p->velocity.x += d0/dist;
-            p->velocity.y += d1/dist;
+            //pushes particle a little outside of circle. uses unit vector ,d0/dist, as it give information on direction but has a length of one.  
+            p->s.center.x = game->circle.center.x + (d0/dist) * game->circle.radius * 1.01;
+            p->s.center.y = game->circle.center.y + (d1/dist) * game->circle.radius * 1.01;
+            
+            //penalty 
+            p->velocity.x += d0/dist * 2.0;
+            p->velocity.y += d1/dist * 2.0;
         } 
 
         //check for off-screen
@@ -327,7 +332,18 @@ void render(Game *game)
     for (int i = 0; i < n; i++) {
         glVertex2i(game->circle.center.x + vert[i].x, game->circle.center.y + vert[i].y);
     }
+    glEnd();
 
+    float x, y;
+    glColor3f(0,1.0,0);
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(game->circle.center.x, game->circle.center.y);
+    for (float angle=0.0f; angle<360.0f; angle+=0.1)
+    {
+            x = game->circle.center.x+sin(angle)*game->circle.radius;
+            y = game->circle.center.y+cos(angle)*game->circle.radius;
+            glVertex2f(x,y);
+    }
     glEnd();
 
     //draw box
@@ -350,7 +366,7 @@ void render(Game *game)
     //draw all particles here
     glPushMatrix();
 
-    glColor3ub(rand() % 255, rand() % 255, rand() % 255);
+    //glColor3ub(rand() % 255, rand() % 255, rand() % 255);
     for (int i = 0; i < game->n; i++) {
         glColor3ub(rand() % 255, rand() % 255, rand() % 255);
         Vec *c = &game->particle[i].s.center;
