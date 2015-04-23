@@ -393,13 +393,23 @@ void render(Game *game)
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    Rect r1;
+    Rect r1, r2, r3, r4, r5;
 
     r1.left = game->box[0].center.x - (game->box[0].width / 2) + 50;
     r1.bot = game->box[0].center.y - game->box[0].height;
     ggprint16(&r1, 200, 0x00ffff00, "Requirements");
-    //ggprint8b(&r, 16, 0x00ffff00, "n bullets: %i", g->nbullets);
-    //ggprint8b(&r, 16, 0x00ffff00, "n asteroids: %i", g->nasteroids);
+    r2.left = game->box[1].center.x - (game->box[1].width / 2) + 50;
+    r2.bot = game->box[1].center.y - game->box[1].height;
+    ggprint16(&r2, 200, 0x00ffff00, "Design");
+    r3.left = game->box[2].center.x - (game->box[2].width / 2) + 50;
+    r3.bot = game->box[2].center.y - game->box[2].height;
+    ggprint16(&r3, 200, 0x00ffff00, "Coding");
+    r4.left = game->box[3].center.x - (game->box[3].width / 2) + 50;
+    r4.bot = game->box[3].center.y - game->box[3].height;
+    ggprint16(&r4, 200, 0x00ffff00, "Testing");
+    r5.left = game->box[4].center.x - (game->box[4].width / 2) + 50;
+    r5.bot = game->box[4].center.y - game->box[4].height;
+    ggprint16(&r5, 200, 0x00ffff00, "Maintenance");
 }
 
 
