@@ -316,20 +316,7 @@ void movement(Game *game)
 
 void render(Game *game)
 {
-
-	Rect r1, r2, r3, r4, r5;
-
-	r1.bot = 900 - 20;
-	r1.left = 10;
-	//r1.center = 0;
-    r1.centerx = game->box[0].center.x;
-    r1.centery = game->box[0].center.y;
-    ggprint16(&r1, 36, 0x00cdc2c2, "Requirements");
-    //ggprint8b(&r, 16, 0x00ffff00, "n bullets: %i", g->nbullets);
-	//ggprint8b(&r, 16, 0x00ffff00, "n asteroids: %i", g->nasteroids);
-
-
-    glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
     //Draw shapes...
     float w, h;
 
@@ -401,6 +388,18 @@ void render(Game *game)
         glEnd();
     }
     glPopMatrix();
+   
+    glDisable(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    Rect r1;
+
+    r1.left = game->box[0].center.x - (game->box[0].width / 2) + 50;
+    r1.bot = game->box[0].center.y - game->box[0].height;
+    ggprint16(&r1, 200, 0x00ffff00, "Requirements");
+    //ggprint8b(&r, 16, 0x00ffff00, "n bullets: %i", g->nbullets);
+    //ggprint8b(&r, 16, 0x00ffff00, "n asteroids: %i", g->nasteroids);
 }
 
 
