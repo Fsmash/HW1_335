@@ -36,6 +36,10 @@
 #include <X11/keysym.h>
 #include <GL/glx.h>
 
+extern "C" {
+	#include "fonts.h"
+}
+
 #define WINDOW_WIDTH  800
 #define WINDOW_HEIGHT 600
 
@@ -121,6 +125,7 @@ int main(void)
         glXSwapBuffers(dpy, win);
     }
     cleanupXWindows();
+	cleanup_fonts();
     return 0;
 }
 
@@ -177,6 +182,9 @@ void init_opengl(void)
     glOrtho(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT, -1, 1);
     //Set the screen background color
     glClearColor(0.1, 0.1, 0.1, 1.0);
+	//allow fonts
+    glEnable(GL_TEXTURE_2D);
+	initialize_fonts();
 }
 
 #define rnd() (float)rand() / (float)RAND_MAX
@@ -308,17 +316,30 @@ void movement(Game *game)
 
 void render(Game *game)
 {
-    float w, h;
+
+	Rect r1, r2, r3, r4, r5;
+
+	r1.bot = 900 - 20;
+	r1.left = 10;
+	//r1.center = 0;
+    r1.centerx = game->box[0].center.x;
+    r1.centery = game->box[0].center.y;
+    ggprint16(&r1, 36, 0x00cdc2c2, "Requirements");
+    //ggprint8b(&r, 16, 0x00ffff00, "n bullets: %i", g->nbullets);
+	//ggprint8b(&r, 16, 0x00ffff00, "n asteroids: %i", g->nasteroids);
+
+
     glClear(GL_COLOR_BUFFER_BIT);
     //Draw shapes...
+    float w, h;
 
     const int n = 40;
     static int firsttime = 1;
     static Vec vert[n];
     if (firsttime) {
-        float ang = 0.0, inc = (3.14159 * 2.0) / (float)n;
-        for (int i = 0; i < n; i++) {
-            vert[i].x = game->circle.radius * cos(ang);
+            float ang = 0.0, inc = (3.14159 * 2.0) / (float)n;
+            for (int i = 0; i < n; i++) {
+                    vert[i].x = game->circle.radius * cos(ang);
             vert[i].y = game->circle.radius * sin(ang);
             ang += inc;
         }
